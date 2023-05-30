@@ -296,8 +296,6 @@
     <div>No resources here!</div>
   {/each}
   <button on:click={backButton}>back</button>
-
-  <!-- {pages} -->
   {currentPage}/
   {totalPages}
   <button on:click={forwardButton}>
