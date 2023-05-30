@@ -16,7 +16,14 @@
   let showButton = false;
 
   let resources = data.payload.resources;
-  let displayedResources = resources;
+  let displayedEl = 20;
+  let endEl = 20;
+  let startEl = 0;
+  let displayedResources = resources.slice(startEl,endEl);
+  let currentPage = 1;
+  //create total num displayed
+  //currentpage is an arr with 
+  let totalPages = Math.ceil(resources.length / 20)
   let tagLogicAnd: boolean = true; // Whether all the selected tags must match the resource (vs any of the selected tags)
   // TODO: make this a user preference
   $: tagLogic = tagLogicAnd ? "and" : "or";
@@ -34,6 +41,28 @@
     return str.replace(/\s/g, "");
   };
 
+  let pages = [currentPage];
+  function forwardButton() {
+    if(currentPage < totalPages) {
+      currentPage += 1;
+      endEl += displayedEl;
+      startEl += displayedEl;
+      displayedResources = resources.slice(startEl,endEl);
+      // pages.push(currentPage += 1);
+      // console.log(pages,'pages')
+    }
+    return currentPage
+    // console.log(pages,'pages')
+  }
+
+  function backButton() {
+    if(currentPage > 1) {
+      currentPage --;
+      endEl -= displayedEl;
+      startEl -= displayedEl;
+      displayedResources = resources.slice(startEl,endEl);
+    }
+  }
   function filterResources(event) {
     // Reset displayed resources
     displayedResources = [];
@@ -266,5 +295,14 @@
   {:else}
     <div>No resources here!</div>
   {/each}
+  <button on:click={backButton}>back</button>
+
+  <!-- {pages} -->
+  {currentPage}/
+  {totalPages}
+  <button on:click={forwardButton}>
+    next
+  </button>
+
 </div>
 <div class="italic text-center m-4">Those are all the resources!</div>
